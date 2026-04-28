@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | HushTalk</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+        
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom, #a48ff9, #e27af9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .contact-box {
+            background: #fff;
+            color: #333;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 500px;
+            transform: translateY(30px);
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        .contact-box h1 {
+            color: #6c63ff;
+            margin-bottom: 20px;
+            position: relative;
+            animation: slideDown 0.7s ease-out forwards;
+        }
+        
+        .contact-box h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(to right, #a48ff9, #e27af9);
+            transform: translateX(-50%);
+            animation: lineExpand 1s ease-out 0.4s forwards;
+        }
+        
+        .contact-box p {
+            font-size: 18px;
+            opacity: 0;
+            transform: translateY(15px);
+        }
+        
+        .contact-box p:nth-of-type(1) {
+            animation: fadeUp 0.6s ease-out 0.3s forwards;
+        }
+        
+        .contact-box p:nth-of-type(2) {
+            animation: fadeUp 0.6s ease-out 0.5s forwards;
+        }
+        
+        .contact-box p:nth-of-type(3) {
+            animation: fadeUp 0.6s ease-out 0.7s forwards;
+        }
+        
+        .contact-box a {
+            color: #6c63ff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .contact-box a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(108, 99, 255, 0.1);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        
+        .contact-box a:hover {
+            color: #6c63ff;
+            background-color: #f0f0f0;
+        }
+        
+        .contact-box a:hover::before {
+            left: 0;
+        }
+        
+        .social-links {
+            margin-top: 30px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.9s forwards;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            transform: translateY(-5px);
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes lineExpand {
+            to {
+                width: 60px;
+            }
+        }
+        
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .contact-box:hover {
+            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+            transition: box-shadow 0.3s ease;
+        }
+        
+        @media (max-width: 600px) {
+            .contact-box {
+                padding: 20px;
+                margin: 0 20px;
+            }
+            
+            .contact-box h1 {
+                font-size: 24px;
+            }
+            
+            .contact-box p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="contact-box">
+    <h1>Contact Us</h1>
+    <p>We'd love to hear from you!</p>
+    <p>Email us at: <a href="mailto:hushtalk@gmail.com">hushtalk@gmail.com</a></p>
+    <div class="social-links">
+        <p>Follow us:</p>
+        <a href="https://twitter.com/HushTalk" target="_blank">Twitter</a> |
+        <a href="https://facebook.com/HushTalk" target="_blank">Facebook</a>
+    </div>
+</div>
+</body>
+</html>

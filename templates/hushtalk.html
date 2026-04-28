@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HushTalk - Speech to Sign Language</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #74f7d4, #c174f7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    @keyframes driftIn {
+      0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.98); /* From bottom */
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 500px;
+      animation: driftIn 1s ease-out forwards;
+    }
+
+    h1 {
+      color: #333;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      position: relative;
+      animation: driftIn 1s ease-out forwards;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(to right, #74f7d4, #c174f7);
+      bottom: -6px;
+      left: 0;
+    }
+
+    p {
+      animation: driftIn 1s ease-out forwards;
+      animation-delay: 0.1s;
+    }
+
+    input, select {
+      width: 80%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-top: 10px;
+      animation: driftIn 1s ease-out forwards;
+      animation-delay: 0.2s;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+      outline: none;
+    }
+
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+      animation: driftIn 1s ease-out forwards;
+      animation-delay: 0.3s;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #0056b3;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .output-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+      min-height: 50px;
+    }
+
+    .word-container {
+      text-align: center;
+      margin: 10px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #455673;
+      color: #ffffff;
+      font-size: 20px;
+      animation: driftIn 0.8s ease forwards;
+    }
+
+    .images-container {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin-top: 10px;
+    }
+
+    .images-container img {
+      width: 40px;
+      height: 40px;
+      animation: driftIn 0.5s ease forwards;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>HushTalk</h1>
+    <p>Convert Speech or Text to Sign Language</p>
+    <input type="text" id="textInput" placeholder="Type here..." />
+    <div>
+      <label for="languageSelect">Translate to:</label>
+      <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <option value="de">German</option>
+        <option value="it">Italian</option>
+      </select>
+    </div>
+    <div class="btn-container">
+      <button id="speechToSign">Speech to Sign</button>
+      <button id="translate">Translate</button>
+    </div>
+    <div class="output-section" id="outputSection"></div>
+  </div>
+
+  <script>
+    function removeDiacritics(str) {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    document.getElementById('speechToSign').addEventListener('click', () => {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      alert("🎤 Starting voice recognition... Speak now.");
+      recognition.start();
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('textInput').value = transcript;
+        alert("✅ Voice recognition completed!");
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        alert('❌ Speech recognition failed. Please try again.');
+      };
+    });
+
+    document.getElementById('translate').addEventListener('click', async function () {
+      const text = document.getElementById('textInput').value;
+      const language = document.getElementById('languageSelect').value;
+
+      try {
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, language }),
+        });
+
+        const translatedText = await response.text();
+        displayTranslation(translatedText, language);
+      } catch (error) {
+        console.error('Error translating text:', error);
+        alert('❌ Failed to translate the text. Please try again.');
+      }
+    });
+
+    function displayTranslation(translatedText, language) {
+      const outputSection = document.getElementById('outputSection');
+      outputSection.innerHTML = '';
+
+      const words = translatedText.split(' ');
+
+      words.forEach((word, wordIndex) => {
+        const cleanWord = removeDiacritics(word.toLowerCase());
+
+        const wordContainer = document.createElement('div');
+        wordContainer.classList.add('word-container');
+        wordContainer.innerHTML = `<strong>${word}</strong>`;
+        wordContainer.style.animationDelay = `${wordIndex * 0.1}s`;
+
+        const imageContainer = document.createElement('div');
+        imageContainer.classList.add('images-container');
+
+        [...cleanWord].forEach((char, charIndex) => {
+          if (char.match(/[a-z]/)) {
+            const img = document.createElement('img');
+            img.src = `/static/images/${language}/${char}.jpg`;
+            img.alt = char;
+            img.style.animationDelay = `${wordIndex * 0.1 + charIndex * 0.05}s`;
+            img.onerror = function () {
+              this.style.display = 'none';
+            };
+            imageContainer.appendChild(img);
+          }
+        });
+
+        wordContainer.appendChild(imageContainer);
+        outputSection.appendChild(wordContainer);
+      });
+    }
+  </script>
+</body>
+</html>
